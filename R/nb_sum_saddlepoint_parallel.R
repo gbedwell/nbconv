@@ -14,8 +14,8 @@
 #'
 #'@export
 #'
-nb_saddlepoint_parallel <- function(mus, phis, ps, counts.start, counts.end,
-                                    normalize = TRUE, log.scale = TRUE, n.cores){
+nb_sum_saddlepoint_parallel <- function(mus, phis, ps, counts.start, counts.end,
+                                        normalize = TRUE, log.scale = TRUE, n.cores){
   require(parallel)
   require(matrixStats)
 

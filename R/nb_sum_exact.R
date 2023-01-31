@@ -10,7 +10,7 @@
 #'
 #'@export
 #'
-nb_exact <- function(mus, phis, ps, n.terms = 1000, counts.start = 0, counts.end, n.cores = 1){
+nb_sum_exact <- function(mus, phis, ps, n.terms = 1000, counts.start = 0, counts.end, n.cores = 1){
   # Adapted from https://github.com/slundberg/NBConvolution.jl
   # Implements the PMF described in https://ssrn.com/abstract=1650365
 

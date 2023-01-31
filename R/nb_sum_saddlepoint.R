@@ -13,7 +13,7 @@
 #'
 #'@export
 #'
-nb_saddlepoint <- function(mus, phis, ps, counts.start = 0, counts.end, log.scale = TRUE, normalize = TRUE){
+nb_sum_saddlepoint <- function(mus, phis, ps, counts.start = 0, counts.end, log.scale = TRUE, normalize = TRUE){
 
   require(matrixStats)
 

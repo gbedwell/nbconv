@@ -8,7 +8,7 @@
 #'
 #'@export
 #'
-nb_moments <- function(mus, phis, ps, counts.start = 0, counts.end){
+nb_sum_moments <- function(mus, phis, ps, counts.start = 0, counts.end){
 
   if (!missing(mus)){
     if (!missing(ps)){
