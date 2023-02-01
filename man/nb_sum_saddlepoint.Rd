@@ -10,7 +10,6 @@ nb_sum_saddlepoint(
   ps,
   counts.start = 0,
   counts.end,
-  log.scale = TRUE,
   normalize = TRUE
 )
 }
@@ -24,8 +23,6 @@ nb_sum_saddlepoint(
 \item{counts.start}{The smallest number of counts at which the PMF is to be evaluated. Defaults to 0.}
 
 \item{counts.end}{The largest number of counts at which the PMF is to be evaluated.}
-
-\item{log.scale}{Boolean. If TRUE, saddlepoint approximation is done on the log scale.}
 
 \item{normalize}{Boolean. If TRUE, the PMF is re-normalized to sum to 1.}
 }

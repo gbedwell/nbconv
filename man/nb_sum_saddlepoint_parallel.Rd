@@ -11,7 +11,6 @@ nb_sum_saddlepoint_parallel(
   counts.start,
   counts.end,
   normalize = TRUE,
-  log.scale = TRUE,
   n.cores
 )
 }
@@ -28,9 +27,9 @@ nb_sum_saddlepoint_parallel(
 
 \item{normalize}{Boolean. If TRUE, the PMF is re-normalized to sum to 1.}
 
-\item{log.scale}{Boolean. If TRUE, saddlepoint approximation is done on the log scale.}
-
 \item{n.cores}{The number of CPU cores to use for evaluation.}
+
+\item{log.scale}{Boolean. If TRUE, saddlepoint approximation is done on the log scale.}
 }
 \description{
 Adapted from https://stats.stackexchange.com/questions/72479/generic-sum-of-gamma-random-variables/137318#137318

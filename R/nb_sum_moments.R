@@ -40,7 +40,7 @@ nb_sum_moments <- function(mus, phis, ps, counts.start = 0, counts.end){
                          size = phi.moment,
                          mu = mu.moment)
 
-  if ((moments.pmf[1] > 1e-5 & counts.start != 0) || moments.pmf[length(moments.pmf)] > 1e-5){
+  if (moments.pmf[1] > 1e-5 && counts.start != 0 || moments.pmf[length(moments.pmf)] > 1e-5){
     warning("The density values at one or both of the ends of the given range are > 1e-5. Consider increasing the evaluated range.",
             .call = FALSE)
   }

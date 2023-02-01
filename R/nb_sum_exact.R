@@ -109,7 +109,7 @@ nb_sum_exact <- function(mus, phis, ps, n.terms = 1000, counts.start = 0, counts
 
   }
 
-  if ((pmf[1] > 1e-5 & counts.start != 0) || pmf[length(pmf)] > 1e-5){
+  if (pmf[1] > 1e-5 && counts.start != 0 || pmf[length(pmf)] > 1e-5){
     warning("The density values at one or both of the ends of the given range are > 1e-5. Consider increasing the evaluated range.",
             call. = FALSE)
   }

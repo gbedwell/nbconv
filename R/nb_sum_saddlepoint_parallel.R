@@ -15,7 +15,7 @@
 #'@export
 #'
 nb_sum_saddlepoint_parallel <- function(mus, phis, ps, counts.start, counts.end,
-                                        normalize = TRUE, log.scale = TRUE, n.cores){
+                                        normalize = TRUE, n.cores){
   require(parallel)
   require(matrixStats)
 
@@ -54,18 +54,17 @@ nb_sum_saddlepoint_parallel <- function(mus, phis, ps, counts.start, counts.end,
                                         phis = phis,
                                         counts.start = min(x),
                                         counts.end = max(x),
-                                        normalize = FALSE,
-                                        log.scale = log.scale) },
+                                        normalize = FALSE) },
                        mc.cores = n.cores)
 
   saddlepoint.pmf <- Reduce(c, pmf.list)
 
-  if ((saddlepoint.pmf[1] > 1e-5 & counts.start != 0) || saddlepoint.pmf[length(saddlepoint.pmf)] > 1e-5){
+  if (saddlepoint.pmf[1] > 1e-5 && counts.start != 0 || saddlepoint.pmf[length(saddlepoint.pmf)] > 1e-5){
     near.zero <- FALSE
-  }
+    }
   else{
     near.zero <- TRUE
-  }
+    }
 
   if (!isTRUE(near.zero)){
     warning("The density values at one or both of the ends of the given range are > 1e-5. Consider increasing the evaluated range.",
