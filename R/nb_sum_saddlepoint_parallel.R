@@ -50,11 +50,11 @@ nb_sum_saddlepoint_parallel <- function(mus, phis, ps, counts.start, counts.end,
 
   pmf.list <- mclapply(X = count.list,
                        FUN = function(x) {
-                         nb_saddlepoint(mus = mus,
-                                        phis = phis,
-                                        counts.start = min(x),
-                                        counts.end = max(x),
-                                        normalize = FALSE) },
+                         nb_sum_saddlepoint(mus = mus,
+                                            phis = phis,
+                                            counts.start = min(x),
+                                            counts.end = max(x),
+                                            normalize = FALSE) },
                        mc.cores = n.cores)
 
   saddlepoint.pmf <- Reduce(c, pmf.list)
