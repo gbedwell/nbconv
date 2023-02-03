@@ -37,7 +37,7 @@ nb_sum_exact <- function(mus, phis, ps, n.terms = 1000, counts.start = 0, counts
 
   pmax <- max(ps)
   qmax <- 1-pmax
-  rsum <- sum(phis)
+  phisum <- sum(phis)
 
   R <- 1
 
@@ -49,7 +49,7 @@ nb_sum_exact <- function(mus, phis, ps, n.terms = 1000, counts.start = 0, counts
   xtmp <- rep(0, length(ps))
   for (i in 1:n.terms){
     for (j in 1:length(ps)){
-      xtmp[j] <- phis[j]*(1-qmax*ps[j]/((1-ps[j])*pmax))^i/i
+      xtmp[j] <- (phis[j]*(1-qmax*ps[j]/((1-ps[j])*pmax))^i)/i
     }
     xi[i] <- sum(xtmp)
   }
@@ -67,11 +67,11 @@ nb_sum_exact <- function(mus, phis, ps, n.terms = 1000, counts.start = 0, counts
   }
 
   mass_calc <- function(x = s){
-    total <- 0.0
-    lastv <- 0.0
+    total <- 0
+    lastv <- 0
 
     for (k in 0:(n.terms-1)){
-      v <- delta[k+1]*exp(lgamma(rsum + x + k) - lgamma(rsum + k) - lfactorial(x) + (rsum + k)*log(pmax) + x*log(1-pmax))
+      v <- delta[k+1]*exp(lgamma(phisum + x + k) - lgamma(phisum + k) - lfactorial(x) + (phisum + k)*log(pmax) + x*log(1-pmax))
       total <- total + v
 
       if (k == (n.terms-1)){
