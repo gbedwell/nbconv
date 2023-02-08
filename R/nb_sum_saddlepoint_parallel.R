@@ -45,7 +45,7 @@ nb_sum_saddlepoint_parallel <- function(mus, phis, ps, counts.start, counts.end,
   }
 
   count.vec <- counts.start:counts.end
-  count.list <- split(count.vec, ceiling(seq_along(count.vec)/floor(sqrt(n.counts))))
+  count.list <- split(count.vec, ceiling(seq_along(count.vec)/floor(sqrt(counts.end))))
 
 
   pmf.list <- mclapply(X = count.list,

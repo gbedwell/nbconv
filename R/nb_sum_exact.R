@@ -96,7 +96,7 @@ nb_sum_exact <- function(mus, phis, ps, n.terms = 1000, counts.start = 0, counts
     require(parallel)
 
     count.vec <- counts.start:counts.end
-    count.list <- split(count.vec, ceiling(seq_along(count.vec)/floor(sqrt(n.counts))))
+    count.list <- split(count.vec, ceiling(seq_along(count.vec)/floor(sqrt(counts.end))))
 
     pmf.list <- mclapply(X = count.list,
                          FUN = function(y) {
