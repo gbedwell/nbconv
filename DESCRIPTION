@@ -1,12 +1,13 @@
 Package: nbconv
-Title: What the Package Does (One Line, Title Case)
+Title: Evaluate the sum of arbitrary negative binomial distributions.
 Version: 0.0.0.9000
 Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"),
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
+    person("Gregory", "Bedwell", , "gregoryjbedwell@gmail.com", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0003-0456-0032"))
+Maintainer: Greg Bedwell <gregoryjbedwell@gmail.com>
+Depends: R (>= 4.2), parallel, matrixStats     
+Description: nbconv implements three different methods for evaluating the sum of negative binomial distributions with arbitrary parameters. The three methods are: Furman's exact PMF, a saddlepoint approximation, and a method of moments approximation.
+License: use_gpl3_license()
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.0
