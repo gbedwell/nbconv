@@ -10,7 +10,8 @@ nb_sum_saddlepoint(
   ps,
   counts.start = 0,
   counts.end,
-  normalize = TRUE
+  normalize = TRUE,
+  n.cores = 1
 )
 }
 \arguments{

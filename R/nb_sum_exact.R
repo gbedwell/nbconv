@@ -8,6 +8,8 @@
 #'@param counts.end The largest number of counts at which the PMF is to be evaluated.
 #'@param n.cores The number of CPU cores to use in the evaluation. Allows parallelization.
 #'
+#'@import parallel
+#'
 #'@export
 #'
 nb_sum_exact <- function(mus, phis, ps, n.terms = 1000, counts.start = 0, counts.end, n.cores = 1){
@@ -36,84 +38,82 @@ nb_sum_exact <- function(mus, phis, ps, n.terms = 1000, counts.start = 0, counts
   }
 
   pmax <- max(ps)
-  qmax <- 1-pmax
+  qmax <- 1 - pmax
   phisum <- sum(phis)
 
   R <- 1
 
   for (j in 1:length(ps)){
-    R <- R*(((1-ps[j])*pmax)/(qmax*ps[j]))^(-phis[j])
+    R <- R * (((1 - ps[j]) * pmax)/(qmax * ps[j]))^(-phis[j])
   }
 
-  xi <- rep(0, n.terms)
-  xtmp <- rep(0, length(ps))
+  xi <- rep(x = 0, times = n.terms)
+  xtmp <- rep(x = 0, times = length(ps))
   for (i in 1:n.terms){
     for (j in 1:length(ps)){
-      xtmp[j] <- (phis[j]*(1-qmax*ps[j]/((1-ps[j])*pmax))^i)/i
+      xtmp[j] <- (phis[j] * (1 - qmax * ps[j]/((1 - ps[j]) * pmax))^i) / i
     }
     xi[i] <- sum(xtmp)
   }
 
-  delta <- rep(0, n.terms)
-  dtmp <- rep(0, n.terms)
+  delta <- rep(x = 0, times = n.terms)
+  dtmp <- rep(x = 0, times = n.terms)
   delta[1] <- 1
 
-  for (k in 1:(n.terms-1)){
+  for (k in 1:(n.terms - 1)){
     for (i in 1:k) {
-      previndex <- k+1-i
-      dtmp[i] <- i*xi[i]*delta[previndex]
-    }
-    delta[k+1] <- sum(dtmp)/k
-  }
-
-  mass_calc <- function(x = s){
-    total <- 0
-    lastv <- 0
-
-    for (k in 0:(n.terms-1)){
-      v <- delta[k+1]*exp(lgamma(phisum + x + k) - lgamma(phisum + k) - lfactorial(x) + (phisum + k)*log(pmax) + x*log(1-pmax))
-      total <- total + v
-
-      if (k == (n.terms-1)){
-        if (any(is.na(v)) || any(is.infinite(v))){
-          stop("Values out of bounds. PMF can not be computed.", call. = FALSE)
-        }
-        if (any(v > 1e-10) || any(lastv < v & v > 1e-50)){
-          stop("Insufficient sum expansion. Use more terms.", call. = FALSE)
-        }
+      previndex <- k + 1 - i
+      dtmp[i] <- i * xi[i] * delta[previndex]
       }
-      lastv <- v
+    delta[k + 1] <- sum(dtmp) / k
+    }
+
+  mass_calc <- function(x){
+    total <- 0
+    for (k in 0:(n.terms - 1)){
+      v <- delta[k + 1]*exp(lgamma(phisum + x + k) - lgamma(phisum + k) - lfactorial(x) + (phisum + k) * log(pmax) + x * log(1 - pmax))
+      total <- total + v
+    }
+    if (any(is.na(v) | any(is.infinite(v)))){
+      stop("Values out of bounds. PMF cannot be evaluated.", call. = FALSE)
+    }
+    if ( (v[length(v)] > 1e-10) ||  (v[length(v) - 1] < v[length(v)] && v[length(v)] > 1e-50) ){
+      stop("Insufficient sum expansion. Use more terms.", call. = FALSE)
     }
     masses <- total*R
     return(masses)
   }
 
   if (n.cores == 1){
-    s <- counts.start:counts.end
-    pmf <- mass_calc(x = s)
+    v <- counts.start:counts.end
+    pmf <- mass_calc(x = v)
   }
   else {
     require(parallel)
 
-    count.vec <- counts.start:counts.end
-    count.list <- split(count.vec, ceiling(seq_along(count.vec)/floor(sqrt(counts.end))))
+    v <- counts.start:counts.end
+    v.list <- split(v, ceiling((seq_along(v))/1000))
 
-    pmf.list <- mclapply(X = count.list,
+    pmf.list <- mclapply(X = v.list,
                          FUN = function(y) {
-                           s <- min(y):max(y)
-                           pmf <- mass_calc(x = s)
+                           v.split <- min(y):max(y)
+                           pmf <- mass_calc(x = v.split)
                            return(pmf) },
                          mc.cores = n.cores)
 
     pmf <- Reduce(c, pmf.list)
-
   }
 
-  if (pmf[1] > 1e-5 && counts.start != 0 || pmf[length(pmf)] > 1e-5){
-    warning("The density values at one or both of the ends of the given range are > 1e-5. Consider increasing the evaluated range.",
-            call. = FALSE)
+  if (is.numeric(pmf)){
+    if (sum(pmf) < 0.9999){
+      warning("The sum of the evaluated distribution is less than 0.9999. Consider expanding the range.",
+              call. = FALSE)
+    }
+    return(pmf)
   }
-
-  return(pmf)
+  else{
+    error <- sub("Error : *", "", pmf[1])
+    stop(paste0(error, "\n"), call. = FALSE)
+  }
 }
 

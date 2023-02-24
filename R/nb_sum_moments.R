@@ -31,18 +31,18 @@ nb_sum_moments <- function(mus, phis, ps, counts.start = 0, counts.end){
     stop("'mus' and 'phis' must have the same length.", call. = FALSE)
   }
 
-  s <- counts.start:counts.end
-
   mu.moment <- sum(mus)
   phi.moment <- sum(mus)^2/sum(mus^2/phis)
 
-  moments.pmf <- dnbinom(x = s,
+  v <- counts.start:counts.end
+
+  moments.pmf <- dnbinom(x = v,
                          size = phi.moment,
                          mu = mu.moment)
 
-  if (moments.pmf[1] > 1e-5 && counts.start != 0 || moments.pmf[length(moments.pmf)] > 1e-5){
-    warning("The density values at one or both of the ends of the given range are > 1e-5. Consider increasing the evaluated range.",
-            .call = FALSE)
+  if (sum(moments.pmf) < 0.9999){
+    warning("The sum of the evaluated distribution is less than 0.9999. Consider expanding the range.",
+            call. = FALSE)
   }
 
   return(moments.pmf)
