@@ -40,8 +40,8 @@ nb_sum_moments <- function(mus, phis, ps, counts.start = 0, counts.end){
                          size = phi.moment,
                          mu = mu.moment)
 
-  if (sum(moments.pmf) < 0.9999){
-    warning("The sum of the evaluated distribution is less than 0.9999. Consider expanding the range.",
+  if (sum(moments.pmf) < 0.999){
+    warning("The sum of the evaluated distribution is less than 0.999. Consider expanding the range.",
             call. = FALSE)
   }
 

@@ -105,8 +105,8 @@ nb_sum_exact <- function(mus, phis, ps, n.terms = 1000, counts.start = 0, counts
   }
 
   if (is.numeric(pmf)){
-    if (sum(pmf) < 0.9999){
-      warning("The sum of the evaluated distribution is less than 0.9999. Consider expanding the range.",
+    if (sum(pmf) < 0.999){
+      warning("The sum of the evaluated distribution is less than 0.999. Consider expanding the range.",
               call. = FALSE)
     }
     return(pmf)

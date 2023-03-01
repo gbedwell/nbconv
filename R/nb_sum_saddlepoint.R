@@ -107,7 +107,7 @@ nb_sum_saddlepoint <- function(mus, phis, ps, counts.start = 0, counts.end, norm
   left <- max(saddlepoint.pmf)/saddlepoint.pmf[1]
   right <- max(saddlepoint.pmf)/saddlepoint.pmf[length(saddlepoint.pmf)]
 
-  if ((left < 1e10 && counts.start != 0) || right < 1e10){
+  if ((left < 1e3 && counts.start != 0) || right < 1e3){
     small <- FALSE
   }
   else{
