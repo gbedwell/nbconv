@@ -4,18 +4,14 @@
 \alias{nb_sum_moments}
 \title{Implements the method of moments approximation for the sum of arbitrary NB random variables}
 \usage{
-nb_sum_moments(mus, phis, ps, counts.start = 0, counts.end)
+nb_sum_moments(mus, phis, counts)
 }
 \arguments{
 \item{mus}{Vector of individual mean values}
 
 \item{phis}{Vector of individual dispersion parameters. Equivalent to 'size' in dnbinom.}
 
-\item{ps}{Vector of individual probabilities.}
-
-\item{counts.start}{The smallest number of counts at which the PMF is to be evaluated. Defaults to 0.}
-
-\item{counts.end}{The largest number of counts at which the PMF is to be evaluated.}
+\item{counts}{The vector of counts over which the PMF is evaluated.}
 }
 \description{
 Implements the method of moments approximation for the sum of arbitrary NB random variables

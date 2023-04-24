@@ -4,30 +4,19 @@
 \alias{nb_sum_saddlepoint}
 \title{Implements the saddlepoint approximation for the sum of arbitrary NB random variables}
 \usage{
-nb_sum_saddlepoint(
-  mus,
-  phis,
-  ps,
-  counts.start = 0,
-  counts.end,
-  normalize = TRUE,
-  n.cores = 1
-)
+nb_sum_saddlepoint(mus, phis, counts, normalize = TRUE, n.cores = 1)
 }
 \arguments{
 \item{mus}{Vector of individual mean values}
 
 \item{phis}{Vector of individual dispersion parameters. Equivalent to 'size' in dnbinom.}
 
-\item{ps}{Vector of individual probabilities.}
-
-\item{counts.start}{The smallest number of counts at which the PMF is to be evaluated. Defaults to 0.}
-
-\item{counts.end}{The largest number of counts at which the PMF is to be evaluated.}
+\item{counts}{The vector of counts over which the PMF is evaluated.}
 
 \item{normalize}{Boolean. If TRUE, the PMF is re-normalized to sum to 1.}
+
+\item{n.cores}{The number of CPU cores to use in the evaluation. Allows parallelization.}
 }
 \description{
-Adapted from https://stats.stackexchange.com/questions/72479/generic-sum-of-gamma-random-variables/137318#137318
-and https://www.martinmodrak.cz/2019/06/20/approximate-densities-for-sums-of-variables-negative-binomials-and-saddlepoint/
+Implements the saddlepoint approximation for the sum of arbitrary NB random variables
 }

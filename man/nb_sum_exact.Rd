@@ -4,30 +4,20 @@
 \alias{nb_sum_exact}
 \title{Implements Furman's exact PMF for the evaluation of the sum of arbitrary NB random variables}
 \usage{
-nb_sum_exact(
-  mus,
-  phis,
-  ps,
-  n.terms = 1000,
-  counts.start = 0,
-  counts.end,
-  n.cores = 1
-)
+nb_sum_exact(phis, ps, n.terms = 1000, counts, n.cores = 1, tolerance = 0.001)
 }
 \arguments{
-\item{mus}{Vector of individual mean values}
-
 \item{phis}{Vector of individual dispersion parameters. Equivalent to 'size' in dnbinom.}
 
 \item{ps}{Vector of individual probabilities.}
 
 \item{n.terms}{The number of terms to include in the series for evaluating the PMF at a given number of counts. Defaults to 1000.}
 
-\item{counts.start}{The smallest number of counts at which the PMF is to be evaluated. Defaults to 0.}
-
-\item{counts.end}{The largest number of counts at which the PMF is to be evaluated.}
+\item{counts}{The vector of counts over which the PMF is evaluated.}
 
 \item{n.cores}{The number of CPU cores to use in the evaluation. Allows parallelization.}
+
+\item{tolerance}{The acceptable difference between the sum of the K distribution and 1.}
 }
 \description{
 Implements Furman's exact PMF for the evaluation of the sum of arbitrary NB random variables
