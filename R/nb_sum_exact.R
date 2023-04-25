@@ -53,30 +53,29 @@ nb_sum_exact <- function(phis, ps, n.terms = 1000, counts, n.cores = 1, toleranc
     for (k in 0:(n.terms - 1)){
       probs <- delta[k + 1] + ( lgamma( phisum + x + k ) - lgamma( phisum + k ) - lfactorial( x ) + ( phisum + k ) * log( pmax ) + x * log( qmax ) )
       total <- total + exp( probs )
-      }
+    }
     masses <- log( total ) + logR
     return( masses )
-    }
+  }
 
   if (n.cores == 1){
     pmf <- mass_calc(x = counts)
-    } else {
-      count.list <- split(counts, ceiling((seq_along(counts))/1000))
+  } else {
+    count.list <- split(counts, ceiling((seq_along(counts))/1000))
 
-      pmf.list <- mclapply(X = count.list,
-                           FUN = function(y) {
-                             new.counts <- y
-                             pmf <- mass_calc(x = new.counts)
-                             return(pmf) },
-                           mc.cores = n.cores)
+    pmf.list <- mclapply(X = count.list,
+                         FUN = function(y) {
+                           new.counts <- y
+                           pmf <- mass_calc(x = new.counts)
+                           return(pmf) },
+                         mc.cores = n.cores)
 
-      pmf <- Reduce(c, pmf.list)
-      }
+    pmf <- Reduce(c, pmf.list)
+  }
   if (is.numeric( pmf )){
     return( exp ( pmf ) )
-    } else{
-      error <- sub( "Error : *", "", pmf[1] )
-      stop(paste0(error, "\n"), call. = FALSE)
-    }
+  } else{
+    error <- sub( "Error : *", "", pmf[1] )
+    stop(paste0(error, "\n"), call. = FALSE)
   }
-
+}

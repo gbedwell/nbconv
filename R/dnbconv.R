@@ -17,43 +17,43 @@
 #'
 dnbconv <- function(counts, mus, ps, phis, method = c("exact", "moments", "saddlepoint"),
                     n.terms = 1000, n.cores = 1, tolerance = 1e-3, normalize = TRUE){
-  
+
   method <- match.arg(method, c("exact", "moments", "saddlepoint"))
-  
+
   if( method != "exact" & method != "moments" & method != "saddlepoint"){
     stop("method must be one of 'exact', 'moments', or 'saddlepoint'.", call. = FALSE)
   }
-  
+
   if (!missing(ps) & !missing(mus)){
     stop("'mus' and 'ps' both specified", call. = FALSE)
-    }
-  
+  }
+
   if (missing(ps) & missing(mus)){
     stop("One of 'mus' and 'ps' must be specified", call. = FALSE)
   }
-  
+
   if( method == "exact" ){
     if (missing(ps) & !missing(mus)){
       ps <- phis / ( phis + mus )
-      }
+    }
     if (length(ps) != length(phis)){
       stop("'ps' and 'phis' must have the same length.", call. = FALSE)
-      }
     }
-  
+  }
+
   if( method == "moments" | method == "saddlepoint"){
     if (missing(mus) & !missing(ps)){
       mus <- phis*(1 - ps)/ps
-      }
+    }
     if (length(mus) != length(phis)){
       stop("'mus' and 'phis' must have the same length.", call. = FALSE)
-      }
     }
-  
-  probs <- switch( method,
-                   "exact" = nb_sum_exact( ps = ps, phis = phis, counts = counts, n.terms = n.terms, n.cores = n.cores, tolerance = tolerance ),
-                   "moments" = nb_sum_moments( mus = mus, phis = phis, counts = counts ),
-                   "saddlepoint" = nb_sum_saddlepoint( mus = mus, phis = phis, counts, normalize = normalize, n.cores = n.cores ) )
-  
-  return( probs )
+  }
+
+  pmf <- switch( method,
+                 "exact" = nb_sum_exact( ps = ps, phis = phis, counts = counts, n.terms = n.terms, n.cores = n.cores, tolerance = tolerance ),
+                 "moments" = nb_sum_moments( mus = mus, phis = phis, counts = counts ),
+                 "saddlepoint" = nb_sum_saddlepoint( mus = mus, phis = phis, counts, normalize = normalize, n.cores = n.cores ) )
+
+  return( pmf )
 }

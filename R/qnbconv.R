@@ -1,6 +1,7 @@
 #' Calculates the quantile function for the convolution of arbitrary negative binomial rv's
 #'
-#'@param counts The counts over which the convolution is evaluated. Should be a vector.
+#'@param probs Vector of target (cumulative) probabilities.
+#'@param counts Vector of counts over which the PMF is evaluated.
 #'@param mus Vector of individual mean values
 #'@param ps Vector of individual probabilities.
 #'@param phis Vector of individual dispersion parameters. Equivalent to 'size' in dnbinom.
@@ -15,28 +16,25 @@
 #'
 #'@export
 #'
-qnbsum <- function(probs, counts, mus, ps, phis, method = c("exact", "moments", "saddlepoint"),
-                   n.terms = 1000, n.cores = 1, tolerance = 1e-3, normalize = TRUE){
-  
-  function(counts, mus, ps, phis, method = c("exact", "moments", "saddlepoint"), 
-           n.terms = 1000, n.cores = 1, tolerance = 1e-3, normalize = TRUE){
-    
+qnbconv <- function(probs, counts, mus, ps, phis, method = c("exact", "moments", "saddlepoint"),
+                    n.terms = 1000, n.cores = 1, tolerance = 1e-3, normalize = TRUE){
+
     counts <- 0:max( counts )
-    
+
     method <- match.arg(method, c("exact", "moments", "saddlepoint"))
-    
+
     if( method != "exact" & method != "moments" & method != "saddlepoint"){
       stop("method must be one of 'exact', 'moments', or 'saddlepoint'.", call. = FALSE)
     }
-    
+
     if (!missing(ps) & !missing(mus)){
       stop("'mus' and 'ps' both specified", call. = FALSE)
     }
-    
+
     if (missing(ps) & missing(mus)){
       stop("One of 'mus' and 'ps' must be specified", call. = FALSE)
     }
-    
+
     if( method == "exact" ){
       if (missing(ps) & !missing(mus)){
         ps <- phis/(phis + mus)
@@ -45,7 +43,7 @@ qnbsum <- function(probs, counts, mus, ps, phis, method = c("exact", "moments", 
         stop("'ps' and 'phis' must have the same length.", call. = FALSE)
       }
     }
-    
+
     if( method == "moments" | method == "saddlepoint"){
       if (missing(mus) & !missing(ps)){
         mus <- phis*(1 - ps)/ps
@@ -54,24 +52,24 @@ qnbsum <- function(probs, counts, mus, ps, phis, method = c("exact", "moments", 
         stop("'mus' and 'phis' must have the same length.", call. = FALSE)
       }
     }
-    
-    probs <- switch( method,
-                     "exact" = nb_sum_exact( ps = ps, phis = phis, counts = counts, n.terms = n.terms, n.cores = n.cores, tolerance = tolerance ),
-                     "moments" = nb_sum_moments( mus = mus, phis = phis, counts = counts ),
-                     "saddlepoint" = nb_sum_saddlepoint( mus = mus, phis = phis, counts, normalize = normalize, n.cores = n.cores ) )
-    
-    if ( sum(probs) < max( probs ) ){
+
+    pmf <- switch( method,
+                   "exact" = nb_sum_exact( ps = ps, phis = phis, counts = counts, n.terms = n.terms, n.cores = n.cores, tolerance = tolerance ),
+                   "moments" = nb_sum_moments( mus = mus, phis = phis, counts = counts ),
+                   "saddlepoint" = nb_sum_saddlepoint( mus = mus, phis = phis, counts, normalize = normalize, n.cores = n.cores ) )
+
+    if ( sum( pmf ) < max( probs ) ){
       stop("The largest cumulative probability exceeds the range over which the distribution was evaluated. Increase the number of counts.", call. = FALSE)
     }
-    
-    cumprobs <- cumsum( probs )
-    
-    targetquants <- sapply( X = cumprobs,
+
+    cdf <- cumsum( pmf )
+
+    targetquants <- sapply( X = probs,
                             FUN = function(x){
-                              max( which( cumprobs < x ) - 1 )
+                              max( which( cdf < x ) - 1 )
                             })
-    
+
     return( targetquants )
-    
+
   }
 }

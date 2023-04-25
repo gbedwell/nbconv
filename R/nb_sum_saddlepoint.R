@@ -35,8 +35,8 @@ nb_sum_saddlepoint <- function(mus, phis, counts, normalize = TRUE, n.cores = 1)
                                  tol = sqrt( .Machine$double.eps ) )$root
                     pmf <- pmf_eq(t, x)
                     return(pmf)
-                    }
-                  )
+                  }
+    )
 
     if (exists("pmf0")){
       pmf <- c(pmf0, exp(pmf))
@@ -67,14 +67,8 @@ nb_sum_saddlepoint <- function(mus, phis, counts, normalize = TRUE, n.cores = 1)
   }
 
   if (isTRUE( normalize )){
-    if (all( abs(diff( counts ) ) != 1)){
-      stop("Refusing to normalize. Count values not sequential.")
-      }
-    if (sum( saddlepoint.pmf ) < 0.999){
-      stop("Refusing to normalize. Evaluated sum insufficiently close to 1.")
-      }
     saddlepoint.pmf <- saddlepoint.pmf / sum( saddlepoint.pmf )
-    }
+  }
 
   return( saddlepoint.pmf )
 }
