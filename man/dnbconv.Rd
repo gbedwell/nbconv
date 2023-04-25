@@ -2,7 +2,7 @@
 % Please edit documentation in R/dnbconv.R
 \name{dnbconv}
 \alias{dnbconv}
-\title{Calculates the PMF for the convolution of arbitrary negative binomial rv's}
+\title{Calculates the PMF for the convolution of arbitrary negative binomial random variables.}
 \usage{
 dnbconv(
   counts,
@@ -21,7 +21,7 @@ dnbconv(
 
 \item{mus}{Vector of individual mean values}
 
-\item{ps}{Vector of individual probabilities.}
+\item{ps}{Vector of individual probabilities of success.}
 
 \item{phis}{Vector of individual dispersion parameters. Equivalent to 'size' in dnbinom.}
 
@@ -33,8 +33,15 @@ dnbconv(
 
 \item{tolerance}{The acceptable difference between the sum of the K distribution and 1.}
 
-\item{normalize}{Boolean. If TRUE, the PMF is re-normalized to sum to 1.}
+\item{normalize}{Boolean. If TRUE, the PMF is normalized to sum to 1.}
+}
+\value{
+A numeric vector of probability densities.
 }
 \description{
-Calculates the PMF for the convolution of arbitrary negative binomial rv's
+Calculates the PMF for the convolution of arbitrary negative binomial random variables.
+}
+\examples{
+dnbconv(counts = 0:500, mus = c(100, 10), phis = c(5, 8), method = "exact")
+
 }

@@ -1,11 +1,15 @@
-#' Implements Furman's exact PMF for the evaluation of the sum of arbitrary NB random variables
+#' Implements Furman's exact PMF for the evaluation of the sum of arbitrary NB random variables. Called by other functions. Not intended to be run alone.
 #'
 #'@param phis Vector of individual dispersion parameters. Equivalent to 'size' in dnbinom.
-#'@param ps Vector of individual probabilities.
+#'@param ps Vector of individual probabilities of success.
 #'@param n.terms The number of terms to include in the series for evaluating the PMF at a given number of counts. Defaults to 1000.
 #'@param counts The vector of counts over which the PMF is evaluated.
 #'@param n.cores The number of CPU cores to use in the evaluation. Allows parallelization.
 #'@param tolerance The acceptable difference between the sum of the K distribution and 1.
+#'
+#'@returns A numeric vector of probability densities.
+#'
+#'@examples nb_sum_exact(ps = c(0.05, 0.44), phis = c(5, 8), counts = 0:500)
 #'
 #'@import parallel
 #'@import matrixStats

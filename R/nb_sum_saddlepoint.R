@@ -1,13 +1,19 @@
-#' Implements the saddlepoint approximation for the sum of arbitrary NB random variables
+#' Implements the saddlepoint approximation for the sum of arbitrary NB random variables. Called by other functions. Not intended to be run alone.
 #'
-#'@param mus Vector of individual mean values
+#'@param mus Vector of individual mean values.
 #'@param phis Vector of individual dispersion parameters. Equivalent to 'size' in dnbinom.
 #'@param counts The vector of counts over which the PMF is evaluated.
-#'@param normalize Boolean. If TRUE, the PMF is re-normalized to sum to 1.
+#'@param normalize Boolean. If TRUE, the PMF is normalized to sum to 1.
 #'@param n.cores The number of CPU cores to use in the evaluation. Allows parallelization.
+#'
+#'@returns A numeric vector of probability densities.
+#'
+#'@examples nb_sum_saddlepoint(mus = c(100, 10), phis = c(5, 8), counts = 0:500)
 #'
 #'@import matrixStats
 #'@import parallel
+#'@importFrom stats "pnbinom"
+#'@importFrom stats "uniroot"
 #'
 #'@export
 #'
@@ -39,10 +45,10 @@ nb_sum_saddlepoint <- function(mus, phis, counts, normalize = TRUE, n.cores = 1)
     )
 
     if (exists("pmf0")){
-      pmf <- c(pmf0, exp(pmf))
+      pmf <- c( pmf0, exp( pmf ) )
     }
     else{
-      pmf <- exp(pmf)
+      pmf <- exp( pmf )
     }
     return(pmf)
   }

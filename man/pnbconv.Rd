@@ -2,10 +2,10 @@
 % Please edit documentation in R/pnbconv.R
 \name{pnbconv}
 \alias{pnbconv}
-\title{Calculates the CDF for the convolution of arbitrary negative binomial rv's}
+\title{Calculates the CDF for the convolution of arbitrary negative binomial random variables.}
 \usage{
 pnbconv(
-  targets,
+  quants,
   mus,
   ps,
   phis,
@@ -17,9 +17,11 @@ pnbconv(
 )
 }
 \arguments{
+\item{quants}{Vector of quantiles.}
+
 \item{mus}{Vector of individual mean values}
 
-\item{ps}{Vector of individual probabilities.}
+\item{ps}{Vector of individual probabilities of success.}
 
 \item{phis}{Vector of individual dispersion parameters. Equivalent to 'size' in dnbinom.}
 
@@ -31,10 +33,15 @@ pnbconv(
 
 \item{tolerance}{The acceptable difference between the sum of the K distribution and 1.}
 
-\item{normalize}{Boolean. If TRUE, the PMF is re-normalized to sum to 1.}
-
-\item{counts}{The counts over which the convolution is evaluated. Should be a vector.}
+\item{normalize}{Boolean. If TRUE, the PMF is normalized to sum to 1.}
+}
+\value{
+A numeric vector of cumulative probability densities.
 }
 \description{
-Calculates the CDF for the convolution of arbitrary negative binomial rv's
+Calculates the CDF for the convolution of arbitrary negative binomial random variables.
+}
+\examples{
+pnbconv(quants = 200, mus = c(100, 10), phis = c(5, 8), method = "exact")
+
 }

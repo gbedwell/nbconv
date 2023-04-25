@@ -2,21 +2,28 @@
 % Please edit documentation in R/nb_sum_saddlepoint.R
 \name{nb_sum_saddlepoint}
 \alias{nb_sum_saddlepoint}
-\title{Implements the saddlepoint approximation for the sum of arbitrary NB random variables}
+\title{Implements the saddlepoint approximation for the sum of arbitrary NB random variables. Called by other functions. Not intended to be run alone.}
 \usage{
 nb_sum_saddlepoint(mus, phis, counts, normalize = TRUE, n.cores = 1)
 }
 \arguments{
-\item{mus}{Vector of individual mean values}
+\item{mus}{Vector of individual mean values.}
 
 \item{phis}{Vector of individual dispersion parameters. Equivalent to 'size' in dnbinom.}
 
 \item{counts}{The vector of counts over which the PMF is evaluated.}
 
-\item{normalize}{Boolean. If TRUE, the PMF is re-normalized to sum to 1.}
+\item{normalize}{Boolean. If TRUE, the PMF is normalized to sum to 1.}
 
 \item{n.cores}{The number of CPU cores to use in the evaluation. Allows parallelization.}
 }
+\value{
+A numeric vector of probability densities.
+}
 \description{
-Implements the saddlepoint approximation for the sum of arbitrary NB random variables
+Implements the saddlepoint approximation for the sum of arbitrary NB random variables. Called by other functions. Not intended to be run alone.
+}
+\examples{
+nb_sum_saddlepoint(mus = c(100, 10), phis = c(5, 8), counts = 0:500)
+
 }

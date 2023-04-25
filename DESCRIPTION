@@ -1,13 +1,20 @@
 Package: nbconv
-Title: Evaluate the sum of arbitrary negative binomial distributions.
-Version: 0.0.0.9000
+Title: Evaluate Arbitrary Negative Binomial Convolutions
+Version: 1.0.0
 Authors@R: 
-    person("Gregory", "Bedwell", , "gregoryjbedwell@gmail.com", role = c("aut", "cre"),
-           comment = c(ORCID = "0000-0003-0456-0032"))
-Maintainer: Greg Bedwell <gregoryjbedwell@gmail.com>
-Depends: R (>= 4.2), parallel, matrixStats     
-Description: nbconv implements three different methods for evaluating the sum of negative binomial distributions with arbitrary parameters. The three methods are: Furman's exact PMF, a saddlepoint approximation, and a method of moments approximation.
-License: use_gpl3_license()
+    person(
+      "Gregory", "Bedwell",
+      email = "gregoryjbedwell@gmail.com", 
+      role = c("aut", "cre", "cph"),
+      comment = c(ORCID = "0000-0003-0456-0032") )
+URL: https://github.com/gbedwell/nbconv
+BugReports: https://github.com/gbedwell/nbconv/issues   
+Imports: 
+  parallel, 
+  matrixStats, 
+  stats    
+Description: Three distinct methods are implemented for evaluating the sums of arbitrary negative binomial distributions. These methods are: Furman's exact PMF, saddlepoint approximation, and a method of moments approximation. Functions are provided to calculate the density function, the distribution function and the quantile function of the convolutions in question given said evaluation methods. Functions for generating random deviates from negative binomial convolutions and to directly calculate the mean, variance, skewness, and excess kurtosis of said convolutions are also provided.
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.0
+License: GPL (>= 3)

@@ -1,9 +1,15 @@
-#' Generates random samples from the convolution of arbitrary negative binomial rv's
+#' Generates random samples from the convolution of arbitrary negative binomial random variables.
 #'
 #'@param mus Vector of individual mean values
 #'@param phis Vector of individual dispersion parameters. Equivalent to 'size' in dnbinom.
-#'@param ps Vector of individual probabilities.
+#'@param ps Vector of individual probabilities of success.
 #'@param n.samp The number of samples per distribution
+#'
+#'@returns A numeric vector of random deviates.
+#'
+#'@examples rnbconv(mus = c(100, 10), phis = c(5, 8), n.samp = 10)
+#'
+#'@importFrom stats "rnbinom"
 #'
 #'@export
 #'
