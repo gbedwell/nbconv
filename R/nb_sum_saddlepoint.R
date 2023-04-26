@@ -1,5 +1,7 @@
 #' Implements the saddlepoint approximation for the sum of arbitrary NB random variables. Called by other functions. Not intended to be run alone.
 #'
+#' Inspired by https://www.martinmodrak.cz/2019/06/20/approximate-densities-for-sums-of-variables-negative-binomials-and-saddlepoint/
+#'
 #'@param mus Vector of individual mean values.
 #'@param phis Vector of individual dispersion parameters. Equivalent to 'size' in dnbinom.
 #'@param counts The vector of counts over which the PMF is evaluated.
@@ -19,6 +21,8 @@
 #'
 nb_sum_saddlepoint <- function(mus, phis, counts, normalize = TRUE, n.cores = 1){
 
+  # Inspired by https://www.martinmodrak.cz/2019/06/20/approximate-densities-for-sums-of-variables-negative-binomials-and-saddlepoint/
+  
   saddlepoint_calc <- function(mus, phis, counts){
 
     K  <-  function(t) { sum( phis * ( log( phis ) - log( phis + mus * ( 1 - exp( t ) ) ) ) ) }

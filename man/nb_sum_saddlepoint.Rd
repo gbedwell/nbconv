@@ -21,7 +21,7 @@ nb_sum_saddlepoint(mus, phis, counts, normalize = TRUE, n.cores = 1)
 A numeric vector of probability densities.
 }
 \description{
-Implements the saddlepoint approximation for the sum of arbitrary NB random variables. Called by other functions. Not intended to be run alone.
+Inspired by https://www.martinmodrak.cz/2019/06/20/approximate-densities-for-sums-of-variables-negative-binomials-and-saddlepoint/
 }
 \examples{
 nb_sum_saddlepoint(mus = c(100, 10), phis = c(5, 8), counts = 0:500)

@@ -6,7 +6,7 @@
 
 ## Introduction
 
-nbconv was written to facilitate the evaluation of the sums of arbitrary negative binomial (NB) random variables. nbconv implements three distinct methods for approaching this problem: Furman's exact PMF (https://ssrn.com/abstract=1650365), saddlepoint approximation, and a method of moments approximation. I would like to acknowledge Martin Modrák for inspiring me to pursue the saddlepoint approximation with his [related blog post](https://www.martinmodrak.cz/2019/06/20/approximate-densities-for-sums-of-variables-negative-binomials-and-saddlepoint/).
+nbconv was written to facilitate the evaluation of the sums of arbitrary negative binomial (NB) random variables. nbconv implements three distinct methods for approaching this problem: Furman's exact probability mass function (https://ssrn.com/abstract=1650365), saddlepoint approximation, and a method of moments approximation. I would like to acknowledge Martin Modrák for inspiring me to pursue the saddlepoint approximation with his [related blog post](https://www.martinmodrak.cz/2019/06/20/approximate-densities-for-sums-of-variables-negative-binomials-and-saddlepoint/).
 
 It should be noted that Furman's PMF is expressed as a series representation. Because of this, the accuracy of the evaluation is limited by the number of terms included in the series. The probability values calculated in this way are therefore also approximate solutions, meaning that nbconv only offers approximate solutions to the convolution of NB random variables. Nevertheless, the approximations appear to be rather good ones.
 
