@@ -45,6 +45,7 @@ nbconv_params <- function(mus, phis, ps){
 
   mean <- k1
   sigma2 <- k2
+  sigma <- sqrt ( sigma2 )
   skewness <- k3 / k2^(3/2)
   ekurtosis <- k4 / k2^2
 
@@ -53,7 +54,7 @@ nbconv_params <- function(mus, phis, ps){
 
   K.mean <- ( mean * pmax / qmax ) - sum( phis )
 
-  params <- c( mean = mean, sigma2 = sigma2, skewness = skewness, ekurtosis = ekurtosis, K.mean = K.mean)
+  params <- c( mean = mean, sigma2 = sigma2, skewness = skewness, ekurtosis = ekurtosis, K.mean = K.mean )
 
   return( params )
 }

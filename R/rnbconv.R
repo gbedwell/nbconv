@@ -10,10 +10,11 @@
 #'@examples rnbconv(mus = c(100, 10), phis = c(5, 8), n.samp = 10)
 #'
 #'@importFrom stats "rnbinom"
+#'@import parallel
 #'
 #'@export
 #'
-rnbconv <- function(mus, phis, ps, n.samp){
+rnbconv <- function(mus, phis, ps, n.samp, n.cores = 1){
 
   if (!missing(ps) & !missing(mus)){
     stop("'mus' and 'ps' both specified", call. = FALSE)
@@ -34,10 +35,30 @@ rnbconv <- function(mus, phis, ps, n.samp){
   make_dists <- function(x, y, n.samp){
     mat <- cbind(x, y)
     dist <- rnbinom(n=n.samp, size=mat[2], mu=mat[1])
-    }
+  }
 
-  dists <- mapply(FUN=make_dists, x = mus, y = phis, MoreArgs = list(n = n.samp))
-  sumdists <- rowSums(dists)
+  if (n.cores == 1){
+    dists <- mapply(FUN=make_dists, x = mus, y = phis, MoreArgs = list(n = n.samp))
+    sumdists <- rowSums(dists)
+  } else {
+    ind <- split( 1:length( phis ), ceiling( ( seq_along( 1:length( phis ) ) ) / 1000 ) )
+    splitparam <- lapply( X = ind,
+                          FUN = function(x){
+                            matrix( data = c( mus[ x ], phis[ x ] ),
+                                    ncol = 2 )
+                            })
+
+    distlist <- mclapply( X = splitparam,
+                          FUN = function(z) {
+                            zmus <- z[ , 1 ]
+                            zphis <- z[ , 2 ]
+                            dists <- mapply(FUN=make_dists, x = zmus, y = zphis,
+                                            MoreArgs = list( n = n.samp ) )
+                            sumdists <- rowSums(dists) },
+                          mc.cores = n.cores )
+
+    sumdists <- rowSums( do.call( cbind, distlist ) )
+  }
 
   return(sumdists)
 }

@@ -22,13 +22,13 @@
 nb_sum_saddlepoint <- function(mus, phis, counts, normalize = TRUE, n.cores = 1){
 
   # Inspired by https://www.martinmodrak.cz/2019/06/20/approximate-densities-for-sums-of-variables-negative-binomials-and-saddlepoint/
-  
+
   saddlepoint_calc <- function(mus, phis, counts){
 
     K  <-  function(t) { sum( phis * ( log( phis ) - log( phis + mus * ( 1 - exp( t ) ) ) ) ) }
-    dK <-  function(t) { logSumExp( log( phis ) + log( mus ) + t - log( phis + mus - mus * exp( t ) ) ) }
-    ddK <- function(t) { logSumExp( log( phis ) + log( mus ) + log( phis + mus ) + t - 2 * log( phis + mus - mus * exp( t ) ) ) }
-    pmf_eq <- function(t, x) { -0.5 * ( log( 2 * pi ) + ddK( t ) ) + K( t ) - t * x }
+    ldK <-  function(t) { logSumExp( log( phis ) + log( mus ) + t - log( phis + mus - mus * exp( t ) ) ) }
+    lddK <- function(t) { logSumExp( log( phis ) + log( mus ) + log( phis + mus ) + t - 2 * log( phis + mus - mus * exp( t ) ) ) }
+    pmf_eq <- function(t, x) { -0.5 * ( log( 2 * pi ) + lddK( t ) ) + K( t ) - t * x }
 
     if ( min( counts ) == 0 ){
       pmf0 <- prod( pnbinom( 0, size = phis, mu = mus ) )
@@ -38,9 +38,10 @@ nb_sum_saddlepoint <- function(mus, phis, counts, normalize = TRUE, n.cores = 1)
 
     pmf <- sapply(X = counts,
                   FUN = function(x) {
-                    t <- uniroot(function(t) { dK(t) - log(x) },
+                    t <- uniroot(function(t) { ldK(t) - log(x) },
                                  lower = -1e2,
                                  upper = min( log( phis / mus + 1 ) ),
+                                 f.upper = min( log( phis / mus + 1 ) ),
                                  extendInt = "yes",
                                  tol = sqrt( .Machine$double.eps ) )$root
                     pmf <- pmf_eq(t, x)
@@ -69,7 +70,7 @@ nb_sum_saddlepoint <- function(mus, phis, counts, normalize = TRUE, n.cores = 1)
                          FUN = function(y) {
                            pmf <- saddlepoint_calc(mus = mus,
                                                    phis = phis,
-                                                   counts = y)
+                                                   counts = y )
                            return(pmf) },
                          mc.cores = n.cores)
 

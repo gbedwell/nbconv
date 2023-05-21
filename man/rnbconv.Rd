@@ -4,7 +4,7 @@
 \alias{rnbconv}
 \title{Generates random samples from the convolution of arbitrary negative binomial random variables.}
 \usage{
-rnbconv(mus, phis, ps, n.samp)
+rnbconv(mus, phis, ps, n.samp, n.cores = 1)
 }
 \arguments{
 \item{mus}{Vector of individual mean values}
