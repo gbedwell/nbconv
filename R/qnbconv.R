@@ -27,18 +27,30 @@ qnbconv <- function(probs, counts, mus, ps, phis, method = c("exact", "moments",
 
     counts <- 0:max( counts )
 
-    method <- match.arg(method, c("exact", "moments", "saddlepoint"))
+    method <- match.arg( method )
 
     if( method != "exact" & method != "moments" & method != "saddlepoint"){
       stop("method must be one of 'exact', 'moments', or 'saddlepoint'.", call. = FALSE)
     }
 
     if (!missing(ps) & !missing(mus)){
-      stop("'mus' and 'ps' both specified", call. = FALSE)
+      stop("mus and ps both specified", call. = FALSE)
     }
 
     if (missing(ps) & missing(mus)){
-      stop("One of 'mus' and 'ps' must be specified", call. = FALSE)
+      stop("One of mus and ps must be specified", call. = FALSE)
+    }
+
+    if ( !missing( ps ) & ( any( ps <= 0 ) | any( ps > 1 ) ) ){
+      stop("ps must be 0 < ps <= 1", call. = FALSE)
+    }
+
+    if ( any( phis <= 0 ) ){
+      stop("phis must be > 0.", call. = FALSE)
+    }
+
+    if ( !missing( mus ) & any( mus < 0 ) ){
+      stop("mus must be > 0.", call. = FALSE)
     }
 
     if( method == "exact" ){

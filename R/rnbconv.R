@@ -17,11 +17,23 @@
 rnbconv <- function(mus, phis, ps, n.samp, n.cores = 1){
 
   if (!missing(ps) & !missing(mus)){
-    stop("'mus' and 'ps' both specified", call. = FALSE)
+    stop("mus and ps both specified", call. = FALSE)
   }
 
   if (missing(ps) & missing(mus)){
-    stop("One of 'mus' and 'ps' must be specified", call. = FALSE)
+    stop("One of mus and ps must be specified", call. = FALSE)
+  }
+
+  if ( !missing( ps ) & ( any( ps <= 0 ) | any( ps > 1 ) ) ){
+    stop("ps must be 0 < ps <= 1", call. = FALSE)
+  }
+
+  if ( any( phis <= 0 ) ){
+    stop("phis must be > 0.", call. = FALSE)
+  }
+
+  if ( !missing( mus ) & any( mus < 0 ) ){
+    stop("mus must be > 0.", call. = FALSE)
   }
 
   if (missing(mus) & !missing(ps)){

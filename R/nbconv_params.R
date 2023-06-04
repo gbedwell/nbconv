@@ -16,11 +16,23 @@
 nbconv_params <- function(mus, phis, ps){
 
   if (!missing(ps) & !missing(mus)){
-    stop("'mus' and 'ps' both specified", call. = FALSE)
+    stop("mus and ps both specified", call. = FALSE)
   }
 
   if (missing(ps) & missing(mus)){
-    stop("One of 'mus' and 'ps' must be specified", call. = FALSE)
+    stop("One of mus and ps must be specified", call. = FALSE)
+  }
+
+  if ( !missing( ps ) & ( any( ps <= 0 ) | any( ps > 1 ) ) ){
+    stop("ps must be 0 < ps <= 1", call. = FALSE)
+  }
+
+  if ( any( phis <= 0 ) ){
+    stop("phis must be > 0.", call. = FALSE)
+  }
+
+  if ( !missing( mus ) & any( mus < 0 ) ){
+    stop("mus must be > 0.", call. = FALSE)
   }
 
   if (missing(mus) & !missing(ps)){
@@ -54,7 +66,7 @@ nbconv_params <- function(mus, phis, ps){
 
   K.mean <- ( mean * pmax / qmax ) - sum( phis )
 
-  params <- c( mean = mean, sigma2 = sigma2, skewness = skewness, ekurtosis = ekurtosis, K.mean = K.mean )
+  params <- c( mean = mean, sigma2 = sigma2, skewness = skewness, ex.kurtosis = ekurtosis, K.mean = K.mean )
 
   return( params )
 }
