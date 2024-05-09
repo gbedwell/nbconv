@@ -2,16 +2,16 @@
 % Please edit documentation in R/nbconv_params.R
 \name{nbconv_params}
 \alias{nbconv_params}
-\title{Calculates distribution parameters for the convolution of arbitrary negative binomial random variables.}
+\title{Summary statistics}
 \usage{
 nbconv_params(mus, phis, ps)
 }
 \arguments{
-\item{mus}{Vector of individual mean values}
+\item{mus}{Numeric vector of individual mean values}
 
-\item{phis}{Vector of individual dispersion parameters. Equivalent to 'size' in dnbinom.}
+\item{phis}{Numeric vector of individual dispersion parameters. Equivalent to 'size' in dnbinom.}
 
-\item{ps}{Vector of individual probabilities of success.}
+\item{ps}{Numeric vector of individual probabilities of success.}
 }
 \value{
 A named numeric vector of distribution parameters.

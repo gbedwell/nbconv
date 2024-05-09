@@ -2,18 +2,20 @@
 % Please edit documentation in R/rnbconv.R
 \name{rnbconv}
 \alias{rnbconv}
-\title{Generates random samples from the convolution of arbitrary negative binomial random variables.}
+\title{Random Deviates}
 \usage{
 rnbconv(mus, phis, ps, n.samp, n.cores = 1)
 }
 \arguments{
-\item{mus}{Vector of individual mean values}
+\item{mus}{Numeric vector of individual mean values}
 
-\item{phis}{Vector of individual dispersion parameters. Equivalent to 'size' in dnbinom.}
+\item{phis}{Numeric vector of individual dispersion parameters. Equivalent to 'size' in dnbinom.}
 
-\item{ps}{Vector of individual probabilities of success.}
+\item{ps}{Numeric vector of individual probabilities of success.}
 
 \item{n.samp}{The number of samples per distribution}
+
+\item{n.cores}{The number of cores to use in the evaluation. Allows parallelization.}
 }
 \value{
 A numeric vector of random deviates.

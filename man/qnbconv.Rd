@@ -2,7 +2,7 @@
 % Please edit documentation in R/qnbconv.R
 \name{qnbconv}
 \alias{qnbconv}
-\title{Calculates the quantile function for the convolution of arbitrary negative binomial random variables.}
+\title{Quantile Function}
 \usage{
 qnbconv(
   probs,
@@ -18,23 +18,23 @@ qnbconv(
 )
 }
 \arguments{
-\item{probs}{Vector of target (cumulative) probabilities.}
+\item{probs}{Numeric vector of target (cumulative) probabilities.}
 
-\item{counts}{Vector of counts over which the PMF is evaluated.}
+\item{counts}{Integer vector of counts over which the PMF is evaluated.}
 
-\item{mus}{Vector of individual mean values}
+\item{mus}{Numeric vector of individual mean values}
 
-\item{ps}{Vector of individual probabilities of success.}
+\item{ps}{Numeric vector of individual probabilities of success.}
 
-\item{phis}{Vector of individual dispersion parameters. Equivalent to 'size' in dnbinom.}
+\item{phis}{Numeric vector of individual dispersion parameters. Equivalent to 'size' in dnbinom.}
 
 \item{method}{The method by which to evaluate the PMF. One of "exact", "moments", or "saddlepoint".}
 
-\item{n.terms}{The number of terms to include in the series for evaluating the PMF at a given number of counts. Defaults to 1000.}
+\item{n.terms}{The number of terms to include in the series representation of the exact PMF. Defaults to 1000.}
 
 \item{n.cores}{The number of CPU cores to use in the evaluation. Allows parallelization.}
 
-\item{tolerance}{The acceptable difference between the sum of the K distribution and 1.}
+\item{tolerance}{The acceptable difference between the sum of the K distribution and 1. Defaults to 1E-3.}
 
 \item{normalize}{Boolean. If TRUE, the PMF is normalized to sum to 1.}
 }

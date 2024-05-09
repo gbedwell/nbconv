@@ -1,8 +1,10 @@
+#' Summary statistics
+#'
 #' Calculates distribution parameters for the convolution of arbitrary negative binomial random variables.
 #'
-#'@param mus Vector of individual mean values
-#'@param phis Vector of individual dispersion parameters. Equivalent to 'size' in dnbinom.
-#'@param ps Vector of individual probabilities of success.
+#'@param mus Numeric vector of individual mean values
+#'@param phis Numeric vector of individual dispersion parameters. Equivalent to 'size' in dnbinom.
+#'@param ps Numeric vector of individual probabilities of success.
 #'
 #'@returns A named numeric vector of distribution parameters.
 #'
@@ -15,31 +17,35 @@
 #'
 nbconv_params <- function(mus, phis, ps){
 
-  if (!missing(ps) & !missing(mus)){
+  if( !missing(ps) & !missing(mus) ){
     stop("mus and ps both specified", call. = FALSE)
   }
 
-  if (missing(ps) & missing(mus)){
+  if( missing(ps) & missing(mus) ){
     stop("One of mus and ps must be specified", call. = FALSE)
   }
 
-  if ( !missing( ps ) & ( any( ps <= 0 ) | any( ps > 1 ) ) ){
-    stop("ps must be 0 < ps <= 1", call. = FALSE)
+  if( !missing( ps ) ){
+    if( any( ps <= 0 ) | any( ps > 1 ) ){
+      stop("ps must be 0 < ps <= 1", call. = FALSE)
+    }
   }
 
-  if ( any( phis <= 0 ) ){
+  if( any( phis <= 0 ) ){
     stop("phis must be > 0.", call. = FALSE)
   }
 
-  if ( !missing( mus ) & any( mus < 0 ) ){
-    stop("mus must be > 0.", call. = FALSE)
+  if( !missing( mus ) ){
+    if( any( mus < 0 ) ){
+      stop("mus must be > 0.", call. = FALSE)
+    }
   }
 
-  if (missing(mus) & !missing(ps)){
+  if( missing(mus) & !missing(ps) ){
     mus <- phis*(1 - ps)/ps
     }
 
-  if (length(mus) != length(phis)){
+  if( length(mus) != length(phis) ){
       stop("'mus' and 'phis' must have the same length.", call. = FALSE)
     }
 
@@ -57,7 +63,7 @@ nbconv_params <- function(mus, phis, ps){
 
   mean <- k1
   sigma2 <- k2
-  sigma <- sqrt ( sigma2 )
+  sigma <- sqrt( sigma2 )
   skewness <- k3 / k2^(3/2)
   ekurtosis <- k4 / k2^2
 
@@ -66,7 +72,11 @@ nbconv_params <- function(mus, phis, ps){
 
   K.mean <- ( mean * pmax / qmax ) - sum( phis )
 
-  params <- c( mean = mean, sigma2 = sigma2, skewness = skewness, ex.kurtosis = ekurtosis, K.mean = K.mean )
+  params <- c( mean = mean,
+               sigma2 = sigma2,
+               skewness = skewness,
+               ex.kurtosis = ekurtosis,
+               K.mean = K.mean )
 
   return( params )
 }

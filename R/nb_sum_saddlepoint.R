@@ -1,10 +1,10 @@
+#' Saddlepoint approximation
+#'
 #' Implements the saddlepoint approximation for the sum of arbitrary NB random variables. Called by other functions. Not intended to be run alone.
 #'
-#' Inspired by https://www.martinmodrak.cz/2019/06/20/approximate-densities-for-sums-of-variables-negative-binomials-and-saddlepoint/
-#'
-#'@param mus Vector of individual mean values.
-#'@param phis Vector of individual dispersion parameters. Equivalent to 'size' in dnbinom.
-#'@param counts The vector of counts over which the PMF is evaluated.
+#'@param mus Numeric vector of individual mean values
+#'@param phis Numeric vector of individual dispersion parameters. Equivalent to 'size' in dnbinom.
+#'@param counts Integer vector of counts over which the convolution is evaluated.
 #'@param normalize Boolean. If TRUE, the PMF is normalized to sum to 1.
 #'@param n.cores The number of CPU cores to use in the evaluation. Allows parallelization.
 #'
@@ -14,10 +14,9 @@
 #'
 #'@import matrixStats
 #'@import parallel
-#'@importFrom stats "pnbinom"
-#'@importFrom stats "uniroot"
+#'@importFrom stats pnbinom
+#'@importFrom stats uniroot
 #'
-#'@export
 #'
 nb_sum_saddlepoint <- function(mus, phis, counts, normalize = TRUE, n.cores = 1){
 
@@ -36,17 +35,20 @@ nb_sum_saddlepoint <- function(mus, phis, counts, normalize = TRUE, n.cores = 1)
 
     counts <- counts[counts != 0]
 
-    pmf <- sapply(X = counts,
-                  FUN = function(x) {
-                    t <- uniroot(function(t) { ldK(t) - log(x) },
-                                 lower = -1e2,
-                                 upper = min( log( phis / mus + 1 ) ),
-                                 f.upper = min( log( phis / mus + 1 ) ),
-                                 extendInt = "yes",
-                                 tol = sqrt( .Machine$double.eps ) )$root
-                    pmf <- pmf_eq(t, x)
-                    return(pmf)
-                  }
+    pmf <- vapply(
+      X = counts,
+      FUN = function(x){
+        t <- uniroot(
+          function(t){ ldK(t) - log(x) },
+          lower = -1e2,
+          upper = min( log( phis / mus + 1 ) ),
+          f.upper = min( log( phis / mus + 1 ) ),
+          extendInt = "yes",
+          tol = sqrt( .Machine$double.eps ) )$root
+        pmf <- pmf_eq(t, x)
+        return(pmf)
+        },
+      FUN.VALUE = numeric(1)
     )
 
     if (exists("pmf0")){
@@ -64,17 +66,43 @@ nb_sum_saddlepoint <- function(mus, phis, counts, normalize = TRUE, n.cores = 1)
                                         counts = counts)
   }
   else{
-    counts.list <- split( counts, ceiling( ( seq_along( counts ) ) / 1000 ) )
+    nn <- floor( length( counts ) / n.cores )
+    count.list <- split( counts, ceiling( ( seq_along( counts ) ) / nn ) )
 
-    pmf.list <- mclapply(X = counts.list,
-                         FUN = function(y) {
-                           pmf <- saddlepoint_calc(mus = mus,
-                                                   phis = phis,
-                                                   counts = y )
-                           return(pmf) },
-                         mc.cores = n.cores)
+    clust <- makeCluster( n.cores, type = "PSOCK" )
 
-    saddlepoint.pmf <- Reduce(c, pmf.list)
+    packages <- c( "matrixStats" )
+    funs <- c( "pnbinom", "uniroot" )
+
+    clusterExport( cl = clust,
+                   varlist = list( "count.list", "mus", "phis", "saddlepoint_calc", "packages", "funs" ),
+                   envir = environment() )
+
+    clusterEvalQ( cl = clust,
+                  {
+                    lapply( packages, library, character.only = TRUE )
+                    for (f in funs) {
+                      assign( f, getFromNamespace( f, "stats" ), envir = environment() )
+                      }
+                    }
+                  )
+
+    pmf.list <- parLapply(
+      cl = clust,
+      X = count.list,
+      fun = function(x){
+        pmf <- saddlepoint_calc(
+          mus = mus,
+          phis = phis,
+          counts = x
+          )
+        return(pmf)
+      }
+    )
+
+    stopCluster(clust)
+
+    saddlepoint.pmf <- do.call(c, pmf.list)
   }
 
   if (isTRUE( normalize )){

@@ -2,16 +2,16 @@
 % Please edit documentation in R/nb_sum_moments.R
 \name{nb_sum_moments}
 \alias{nb_sum_moments}
-\title{Implements the method of moments approximation for the sum of arbitrary NB random variables. Called by other functions. Not intended to be run alone.}
+\title{Method of Moments}
 \usage{
 nb_sum_moments(mus, phis, counts)
 }
 \arguments{
-\item{mus}{Vector of individual mean values.}
+\item{mus}{Numeric vector of individual mean values}
 
-\item{phis}{Vector of individual dispersion parameters. Equivalent to 'size' in dnbinom.}
+\item{phis}{Numeric vector of individual dispersion parameters. Equivalent to 'size' in dnbinom.}
 
-\item{counts}{The vector of counts over which the PMF is evaluated.}
+\item{counts}{Integer vector of counts over which the convolution is evaluated.}
 }
 \value{
 A numeric vector of probability densities.
