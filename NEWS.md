@@ -12,3 +12,8 @@
 * Added parallelization in rnbconv() to speed up large-scale sampling.
 * Updated notation in nb_sum_saddlepoint() for clarity.
 * Added additional checks to ensure: 0 < ps <= 1, mus >= 0, phis > 0.
+
+# nbconv 1.0.2
+
+* Updated documentation
+* Replaced mclapply() calls with parLapply() to make parallelization available on Windows machines.
